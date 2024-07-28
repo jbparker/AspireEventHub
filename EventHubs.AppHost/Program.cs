@@ -1,8 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddAzureProvisioning();
-
-var eventHub = builder.AddEventHubs("eventhubns", ["hub"]);
+var eventHub = builder.AddAzureEventHubs("eventhubns")
+    .RunAsEmulator()
+    .AddEventHub("hub");
 
 builder.AddProject<Projects.EventHubsConsumer>("consumer")
     .WithReference(eventHub);

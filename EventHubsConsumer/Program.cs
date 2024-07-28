@@ -1,4 +1,3 @@
-using Azure.Identity;
 using Azure.Messaging.EventHubs.Consumer;
 using EventHubsConsumer;
 
@@ -6,16 +5,14 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 
-var ns = builder.Configuration.GetConnectionString("eventhubns");
+var connectionString = builder.Configuration.GetConnectionString("eventhubns");
 
 builder.Services.AddSingleton(sp =>
-{
-    return new EventHubConsumerClient(
-        EventHubConsumerClient.DefaultConsumerGroupName, 
-        ns, 
-        "hub", 
-        new DefaultAzureCredential());
-});
+    new EventHubConsumerClient(
+        EventHubConsumerClient.DefaultConsumerGroupName,
+        connectionString,
+        "hub")
+);
 
 builder.Services.AddHostedService<Consumer>();
 
